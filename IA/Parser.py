@@ -1,7 +1,7 @@
 import email
 import string
 import nltk
-from Stripper import MLStripper
+from IA.Stripper import MLStripper
 
 # sirve para limpiar el archivo html de los tags
 def strip_tags(html):
@@ -9,29 +9,6 @@ def strip_tags(html):
     s.feed(html)
     return s.get_data()
 
-
-
-# The class has a method called parse that takes an email as a string and returns a dictionary with
-# the subject, body, and content type of the email. 
-# 
-# The parse method calls the get_email_content method. 
-# 
-# The get_email_content method takes a message object and returns a dictionary with the subject, body,
-# and content type of the email. 
-# 
-# The get_email_content method calls the get_email_body method. 
-# 
-# The get_email_body method takes a payload and a content type and returns a list of tokens. 
-# 
-# The get_email_body method calls the tokenize method. 
-# 
-# The tokenize method takes a text string and returns a list of tokens. 
-# 
-# The tokenize method calls the stemmer method. 
-# 
-# The stemmer method takes a word and returns the stem of the word. 
-# 
-# The stemmer method calls the stopwords method
 class Parser:
 
     def __init__(self):

@@ -1,6 +1,6 @@
 from sklearn.feature_extraction.text import CountVectorizer
 import matplotlib.pyplot as plt
-from Parser import Parser
+from IA.Parser import Parser
 from pymongo import MongoClient as client
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -13,13 +13,20 @@ DATASET_PATH = "datasets/trec07p"
 
 
 def get_database_collection(collection=True):
-    clientdb = client('mongodb://localhost:27017/')
-    db = clientdb.test_database
-    db = clientdb['machine_learning']
     if collection:
+        clientdb = client('mongodb://localhost:27017/')
+        db = clientdb.test_database
+        db = clientdb['machine_learning']
         return db.mails
     else:
-        return db.processed
+        clientdb = client('mongodb+srv://lucioVero:mbf8jss17c@cluster0.yijke.mongodb.net/?retryWrites=true&w=majority')
+        db = clientdb['machine_learning']
+        col = db['processed']
+        return col
+        # clientdb = client('mongodb://localhost:27017/')
+        # db = clientdb.test_database
+        # db = clientdb['machine_learning']
+        # return db.processed
 
 
 def get_indexes(collection, n_elements):
@@ -118,6 +125,9 @@ def graficar(spams,hams):
     plt.pie(correos, labels=tags, autopct="%0.1f %%")
     plt.axis("equal")
     plt.savefig("grap.png")
+    plt.clf()
+    plt.cla()
+    plt.close()
 
 def test():
     accuracy, y_pred, y = train(300, 105)
@@ -134,6 +144,13 @@ def test():
             spams += 1
     print('No. spams: {}\nNo. hams: {}'.format(spams, hams))
     graficar(spams,hams)
+
+
+def escribir(mail,tag):
+    db =  get_database_collection(collection=False)
+    email,label = parse_email({'label':tag,'mail':mail})
+    db.insert_one({"type":label, 'mail':email})
+
 
 if __name__== '__main__':
     test()
